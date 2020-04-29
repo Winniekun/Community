@@ -1,18 +1,18 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<link rel="icon" href="https://static.nowcoder.com/images/logo_87_87.png"/>
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" crossorigin="anonymous">
-	<link rel="stylesheet" href="../css/global.css" />
-	<link rel="stylesheet" href="../css/login.css" />
-	<title>牛客网-注册</title>
+	<link rel="stylesheet" th:href="@{/css/global.css}" />
+	<link rel="stylesheet" th:href="@{/css/login.css}" />
+	<title>Wiki社区-注册</title>
 </head>
 <body>
 	<div class="nk-container">
 		<!-- 头部 -->
-		<header class="bg-dark sticky-top">
+		<header class="bg-dark sticky-top" th:replace="index::header">
 			<div class="container">
 				<!-- 导航 -->
 				<nav class="navbar navbar-expand-lg navbar-dark">
@@ -63,12 +63,16 @@
 		<div class="main">
 			<div class="container pl-5 pr-5 pt-3 pb-3 mt-3 mb-3">
 				<h3 class="text-center text-info border-bottom pb-3">注&nbsp;&nbsp;册</h3>
-				<form class="mt-5">
+				<!--表单处理-->
+				<form class="mt-5" method="post" th:action="@{/register}">
 					<div class="form-group row">
 						<label for="username" class="col-sm-2 col-form-label text-right">账号:</label>
 						<div class="col-sm-10">
-							<input type="text" class="form-control" id="username" placeholder="请输入您的账号!" required>
-							<div class="invalid-feedback">
+							<input type="text"
+								   th:class="|form-control ${usernameMsg!=null?'is-invalid':''}|"
+								   th:value="${user!=null?user.username:''}"
+								   id="username" name="username" placeholder="请输入您的账号!" required>
+							<div class="invalid-feedback" th:text="${usernameMsg}">
 								该账号已存在!
 							</div>
 						</div>
@@ -76,16 +80,21 @@
 					<div class="form-group row mt-4">
 						<label for="password" class="col-sm-2 col-form-label text-right">密码:</label>
 						<div class="col-sm-10">
-							<input type="password" class="form-control" id="password" placeholder="请输入您的密码!" required>
-							<div class="invalid-feedback">
+							<input type="password"
+								   th:class="|form-control ${passwordMSG!=null?'is-invalid':''}|"
+								   th:value="${user!=null?user.password:''}"
+								   id="password" name="password" placeholder="请输入您的密码!" required>
+							<div class="invalid-feedback" th:text="passwordMSG">
 								密码长度不能小于8位!
-							</div>							
+							</div>
 						</div>
 					</div>
 					<div class="form-group row mt-4">
 						<label for="confirm-password" class="col-sm-2 col-form-label text-right">确认密码:</label>
 						<div class="col-sm-10">
-							<input type="password" class="form-control" id="confirm-password" placeholder="请再次输入密码!" required>
+							<input type="password"
+								   th:value="${user!=null?user.password:''}"
+								   id="confirm-password" placeholder="请再次输入密码:)" required>
 							<div class="invalid-feedback">
 								两次输入的密码不一致!
 							</div>
@@ -94,8 +103,11 @@
 					<div class="form-group row">
 						<label for="email" class="col-sm-2 col-form-label text-right">邮箱:</label>
 						<div class="col-sm-10">
-							<input type="email" class="form-control" id="email" placeholder="请输入您的邮箱!" required>
-							<div class="invalid-feedback">
+							<input type="email"
+								   th:class="|form-control ${mailMSG!=null?'is-invalid':''}|"
+								   th:value="${user!=null?user.email:''}"
+								   id="email" name="email" placeholder="请输入您的邮箱!" required>
+							<div class="invalid-feedback" th:text="mailMSG">
 								该邮箱已注册!
 							</div>
 						</div>
@@ -106,17 +118,18 @@
 							<button type="submit" class="btn btn-info text-white form-control">立即注册</button>
 						</div>
 					</div>
-				</form>				
+				</form>
 			</div>
 		</div>
 
 		<!-- 尾部 -->
-		<footer class="bg-dark">
+		<footer class="bg-dark" th:replace="index::footer">
 			<div class="container">
 				<div class="row">
 					<!-- 二维码 -->
 					<div class="col-4 qrcode">
-						<img src="https://uploadfiles.nowcoder.com/app/app_download.png" class="img-thumbnail" style="width:136px;" />
+						<img src="https://uploadfiles.nowcoder.com/app/app_download.png" class="img-thumbnail"
+							 style="width:136px;"/>
 					</div>
 					<!-- 公司信息 -->
 					<div class="col-8 detail-info">
@@ -151,17 +164,18 @@
 							<div class="col">
 								<ul class="nav btn-group-vertical company-info">
 									<li class="nav-item text-white-50">
-										公司地址：北京市朝阳区大屯路东金泉时代3-2708北京牛客科技有限公司
+										公司地址：噜啦啦
 									</li>
 									<li class="nav-item text-white-50">
-										联系方式：010-60728802(电话)&nbsp;&nbsp;&nbsp;&nbsp;admin@nowcoder.com
+										联系方式：kongwiki@163.com
 									</li>
 									<li class="nav-item text-white-50">
-										牛客科技©2018 All rights reserved
+										WiKi论坛©2020 All rights reserved
 									</li>
 									<li class="nav-item text-white-50">
 										京ICP备14055008号-4 &nbsp;&nbsp;&nbsp;&nbsp;
-										<img src="http://static.nowcoder.com/company/images/res/ghs.png" style="width:18px;" />
+										<img src="http://static.nowcoder.com/company/images/res/ghs.png"
+											 style="width:18px;"/>
 										京公网安备 11010502036488号
 									</li>
 								</ul>
@@ -176,7 +190,7 @@
 	<script src="https://code.jquery.com/jquery-3.3.1.min.js" crossorigin="anonymous"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" crossorigin="anonymous"></script>
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" crossorigin="anonymous"></script>
-	<script src="../js/global.js"></script>
-	<script src="../js/register.js"></script>
+	<script th:src="@{/js/global.js}"></script>
+	<script th:src="@{/js/register.js}"></script>
 </body>
 </html>
