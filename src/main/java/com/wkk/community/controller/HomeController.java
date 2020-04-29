@@ -4,7 +4,7 @@ import com.wkk.community.pojo.DiscussPost;
 import com.wkk.community.pojo.User;
 import com.wkk.community.service.DiscussPostService;
 import com.wkk.community.service.UserService;
-import com.wkk.community.utils.Page;
+import com.wkk.community.util.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

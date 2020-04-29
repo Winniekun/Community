@@ -1,4 +1,4 @@
-package com.wkk.community.utils;
+package com.wkk.community.util;
 
 /**
  * @Time: 2020/4/29下午2:55
