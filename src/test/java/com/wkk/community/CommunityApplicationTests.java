@@ -20,25 +20,25 @@ class CommunityApplicationTests implements ApplicationContextAware {
 
     @Test
     void contextLoads() {
-        System.out.println(applicationContext);
-        AlphaDao alphaDao = (AlphaDao) applicationContext.getBean(AlphaDao.class);
-        System.out.println(alphaDao.select());
+//        System.out.println(applicationContext);
+//        AlphaDao alphaDao = (AlphaDao) applicationContext.getBean(AlphaDao.class);
+//        System.out.println(alphaDao.select());
 
     }
 
     @Test
     public void beanTestManagment(){
-        AlphaService alphaService = applicationContext.getBean(AlphaService.class);
-        System.out.println(alphaService);
-        AlphaService alphaService2 = applicationContext.getBean(AlphaService.class);
-        System.out.println(alphaService2);
+//        AlphaService alphaService = applicationContext.getBean(AlphaService.class);
+//        System.out.println(alphaService);
+//        AlphaService alphaService2 = applicationContext.getBean(AlphaService.class);
+//        System.out.println(alphaService2);
 
     }
 
     @Test
     public void testBeanConfig(){
-        SimpleDateFormat simpleDateFormat = (SimpleDateFormat) applicationContext.getBean(SimpleDateFormat.class);
-        System.out.println(simpleDateFormat.format(new Date()));
+//        SimpleDateFormat simpleDateFormat = (SimpleDateFormat) applicationContext.getBean(SimpleDateFormat.class);
+//        System.out.println(simpleDateFormat.format(new Date()));
 
     }
     @Autowired
@@ -49,9 +49,9 @@ class CommunityApplicationTests implements ApplicationContextAware {
     private SimpleDateFormat simpleDateFormat;
     @Test
     public void testAutowired(){
-        System.out.println(alphaDao);
-        System.out.println(alphaService);
-        System.out.println(simpleDateFormat);
+//        System.out.println(alphaDao);
+//        System.out.println(alphaService);
+//        System.out.println(simpleDateFormat);
     }
 
 
