@@ -1,7 +1,7 @@
 package com.wkk.community.controller;
 
-import com.wkk.community.pojo.DiscussPost;
-import com.wkk.community.pojo.User;
+import com.wkk.community.entity.DiscussPost;
+import com.wkk.community.entity.User;
 import com.wkk.community.service.DiscussPostService;
 import com.wkk.community.service.UserService;
 import com.wkk.community.util.Page;

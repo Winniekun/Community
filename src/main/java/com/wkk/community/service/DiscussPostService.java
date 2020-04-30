@@ -1,8 +1,7 @@
 package com.wkk.community.service;
 
 import com.wkk.community.dao.DiscussPostMapper;
-import com.wkk.community.pojo.DiscussPost;
-import org.apache.ibatis.annotations.Param;
+import com.wkk.community.entity.DiscussPost;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -1,6 +1,6 @@
 package com.wkk.community.dao;
 
-import com.wkk.community.pojo.User;
+import com.wkk.community.entity.User;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
@@ -17,4 +17,5 @@ public interface UserMapper {
     int updateStatus(int id, int status);
     int updateHeader(int id, String headerUrl);
     int updatePassword(int id, String password);
+
 }

@@ -19,7 +19,7 @@
             <!-- 导航 -->
             <nav class="navbar navbar-expand-lg navbar-dark">
                 <!-- logo -->
-                <a class="navbar-brand" href="#"></a>
+                <a class="navbar-brand" th:href="@{/index}"></a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse"
                         data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
@@ -31,28 +31,28 @@
                         <li class="nav-item ml-3 btn-group-vertical">
                             <a class="nav-link" th:href="@{/index}">首页</a>
                         </li>
-                        <li class="nav-item ml-3 btn-group-vertical">
+                        <li class="nav-item ml-3 btn-group-vertical" th:if="${loginUser!=null}">
                             <a class="nav-link position-relative" href="site/letter.html">消息<span
                                     class="badge badge-danger">12</span></a>
                         </li>
-                        <li class="nav-item ml-3 btn-group-vertical">
+                        <li class="nav-item ml-3 btn-group-vertical" th:if="${loginUser==null}">
                             <a class="nav-link" th:href="@{/register}">注册</a>
                         </li>
-                        <li class="nav-item ml-3 btn-group-vertical">
+                        <li class="nav-item ml-3 btn-group-vertical" th:if="${loginUser==null}">
                             <a class="nav-link" th:href="@{/login}">登录</a>
                         </li>
-                        <li class="nav-item ml-3 btn-group-vertical dropdown">
+                        <li class="nav-item ml-3 btn-group-vertical dropdown" th:if="${loginUser!=null}">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <img src="http://images.nowcoder.com/head/1t.png" class="rounded-circle"
+                                <img th:src="${loginUser.headerUrl}" class="rounded-circle"
                                      style="width:30px;"/>
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 <a class="dropdown-item text-center" href="site/profile.html">个人主页</a>
-                                <a class="dropdown-item text-center" href="site/setting.html">账号设置</a>
-                                <a class="dropdown-item text-center" href="site/login.html">退出登录</a>
+                                <a class="dropdown-item text-center" th:href="@{/user/setting}">账号设置</a>
+                                <a class="dropdown-item text-center" th:href="@{/logout}">退出登录</a>
                                 <div class="dropdown-divider"></div>
-                                <span class="dropdown-item text-center text-secondary">nowcoder</span>
+                                <span class="dropdown-item text-center text-secondary" th:utext="${loginUser.username}">nowcoder</span>
                             </div>
                         </li>
                     </ul>
@@ -161,23 +161,23 @@
             <!-- 分页 -->
             <nav class="mt-5" th:if="${page.rows>0}">
 <!--                分页基础-->
-                <ul class="pagination justify-content-center">
-                    <li class="page-item">
-                        <a class="page-link" href="#">首页</a>
-                    </li>
-                    <li class="page-item disabled">
-                        <a class="page-link" href="#">上一页</a>
-                    </li>
-                    <li class="page-item active">
-                        <a class="page-link" href="#">1</a>
-                    </li>
-                    <li class="page-item">
-                        <a class="page-link" href="#">下一页</a>
-                    </li>
-                    <li class="page-item">
-                        <a class="page-link" href="#">尾页</a>
-                    </li>
-                </ul>
+<!--                <ul class="pagination justify-content-center">-->
+<!--                    <li class="page-item">-->
+<!--                        <a class="page-link" href="#">首页</a>-->
+<!--                    </li>-->
+<!--                    <li class="page-item disabled">-->
+<!--                        <a class="page-link" href="#">上一页</a>-->
+<!--                    </li>-->
+<!--                    <li class="page-item active">-->
+<!--                        <a class="page-link" href="#">1</a>-->
+<!--                    </li>-->
+<!--                    <li class="page-item">-->
+<!--                        <a class="page-link" href="#">下一页</a>-->
+<!--                    </li>-->
+<!--                    <li class="page-item">-->
+<!--                        <a class="page-link" href="#">尾页</a>-->
+<!--                    </li>-->
+<!--                </ul>-->
 
 
                 <ul class="pagination justify-content-center">

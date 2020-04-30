@@ -3,19 +3,19 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.wkk.community.dao.UserMapper">
-    <select id="selectById" resultType="User">
+    <select id="selectById" resultType="com.wkk.community.entity.User">
         SELECT *
         FROM user
         WHERE id = #{id}
     </select>
 
-    <select id="selectByName" resultType="User">
+    <select id="selectByName" resultType="com.wkk.community.entity.User">
         SELECT *
         FROM user
         WHERE username = #{userName}
     </select>
 
-    <select id="selectByEmail" resultType="User">
+    <select id="selectByEmail" resultType="com.wkk.community.entity.User">
         SELECT *
         FROM user
         WHERE email = #{email}

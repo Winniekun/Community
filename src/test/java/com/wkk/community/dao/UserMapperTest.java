@@ -1,24 +1,18 @@
 package com.wkk.community.dao;
 
 import com.wkk.community.CommunityApplication;
-import com.wkk.community.pojo.DiscussPost;
-import com.wkk.community.pojo.User;
+import com.wkk.community.entity.DiscussPost;
+import com.wkk.community.entity.User;
 import com.wkk.community.service.DiscussPostService;
-import org.apache.ibatis.annotations.Param;
-import org.assertj.core.internal.bytebuddy.asm.Advice;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestTemplate;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Date;
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @Time: 2020/4/29上午8:18

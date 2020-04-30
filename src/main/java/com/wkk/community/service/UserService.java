@@ -1,7 +1,9 @@
 package com.wkk.community.service;
 
+import com.wkk.community.dao.LoginTicketMapper;
 import com.wkk.community.dao.UserMapper;
-import com.wkk.community.pojo.User;
+import com.wkk.community.entity.LoginTicket;
+import com.wkk.community.entity.User;
 import com.wkk.community.util.CommunityConstant;
 import com.wkk.community.util.CommunityUtil;
 import com.wkk.community.util.MailClient;
@@ -26,10 +28,13 @@ import java.util.Random;
 public class UserService implements CommunityConstant {
     @Autowired(required = false)
     private UserMapper userMapper;
+    @Autowired(required = false)
+    private LoginTicketMapper loginTicketMapper;
     @Autowired
     private MailClient mailClient;
     @Autowired
     private TemplateEngine templateEngine;
+
 
     //域名
     @Value("${community.path.domain}")
@@ -43,6 +48,7 @@ public class UserService implements CommunityConstant {
         return userMapper.selectById(id);
     }
 
+    // 注册业务逻辑处理
     public Map<String, Object> register(User user){
         Map<String, Object> map = new HashMap<>();
         // 输入逻辑问题
@@ -104,6 +110,7 @@ public class UserService implements CommunityConstant {
 
     }
 
+    //激活处理
     public int activation(int userId, String activeCode){
         User user = userMapper.selectById(userId);
         if(user.getStatus() == 1){
@@ -116,5 +123,68 @@ public class UserService implements CommunityConstant {
         }else {
             return ACTIVATION_FAILURE;
         }
+    }
+
+    // 登录业务逻辑
+    public Map<String, Object> login(String username, String password, int expiredSeconds){
+        Map<String, Object> map = new HashMap<>();
+        // 空值处理
+        if(StringUtils.isBlank(username)){
+            map.put("usernameMSG", "账号不能为空");
+            return map;
+        }
+        if(StringUtils.isBlank(password)){
+            map.put("passwordMSG", "密码不能为空");
+            return map;
+        }
+
+        // 合法性对比和数据库对别
+        // 验证账号
+        User user = userMapper.selectByName(username);
+        if(user == null){
+            map.put("usernameMSG", "该账号不存在");
+            return map;
+        }
+        // 是否激活
+        if(user.getStatus() == 0){
+            map.put("usernameMSG", "该账号未激活");
+            return map;
+        }
+        // 验证密码
+        password =CommunityUtil.md5( user.getSalt() + password);
+        if(!password.equals(user.getPassword())){
+            map.put("passwordMSG", "密码不正确");
+            return map;
+        }
+        // 生成登录凭证
+        LoginTicket loginTicket = new LoginTicket();
+        loginTicket.setUserId(user.getId());
+        loginTicket.setTicket(CommunityUtil.generateUUID());
+        loginTicket.setStatus(0);
+        // 登录过期时间
+        loginTicket.setExpired(new Date(System.currentTimeMillis() + expiredSeconds * 1000));
+        loginTicketMapper.insertLoginTicket(loginTicket);
+        map.put("ticket", loginTicket.getTicket());
+        return map;
+
+    }
+
+    // 登出业务
+    public void logout(String ticket){
+        loginTicketMapper.updateStatus(ticket, 1);
+    }
+    // 获取登录凭证
+    public LoginTicket findLoginTicket(String ticket){
+        return loginTicketMapper.selectByTicket(ticket);
+    }
+
+    // 更新用户头像地址
+    public int updateHeader(int userId, String headerUrl){
+        return userMapper.updateHeader(userId, headerUrl);
+    }
+
+    // 更新密码
+    public int updatePassword(int userId, String password){
+        return userMapper.updatePassword(userId, password);
     }
 }

@@ -1,10 +1,8 @@
 package com.wkk.community.dao;
 
-import com.wkk.community.pojo.DiscussPost;
+import com.wkk.community.entity.DiscussPost;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
 

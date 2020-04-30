@@ -151,5 +151,97 @@ public static String generateMD5(String key){
 
 ### 验证码
 
+1. 使用kaptcha动态生成验证码
+
+2. 因为使用的是第三方库，配置好之后，将bean装配到spring容器中
+
+3. 在controller中编写对应的动态生成验证码的URL
+
+   ```java
+   @RequestMapping(value = "/kaptcha", method = RequestMethod.GET)
+   public void getKaptcha(HttpServletResponse response, HttpSession session){
+       // 生成验证码
+       String text = kaptchaProducer.createText();
+       // 生成验证码图片
+       BufferedImage image = kaptchaProducer.createImage(text);
+       // 将验证码存入session
+       session.setAttribute("kaptcha", text);
+       // 将图片输出给浏览器
+       response.setContentType("image/png");
+       try {
+           OutputStream outputStream = response.getOutputStream();
+           ImageIO.write(image, "png", outputStream);
+       } catch (IOException e) {
+           logger.error("响应验证码失败: " + e.getMessage());
+       }
+   }
+   ```
+
+   
+
+为什么使用`session`存储验证码：
+
+> 单台服务器下，session是一个不错的验证码存储的地方，我们不用担心各个会话间的验证码存在冲突。
+
+
+
+### 登录、退出模块
+
+#### 步骤：
+
+1. 访问登录界面
+2. 登录
+   1. 验证账号、密码、验证码
+   2. 成功: 生成登录凭证，发送给客户端（cookies）
+   3. 失败: 跳转回登录页
+3. 退出
+   1. 将登录凭证改为失效状态
+   2. 跳转至登录页面
+
+### 显示登录信息（拦截器）
+
+登录成功：
+
+导航栏：首页、消息、用户头像
+
+![社区-登录.png](https://i.loli.net/2020/04/30/X7sqpkOa9t5MRZf.png)
+
+
+
+登录不成功：
+
+导航栏：首页、注册、登录
+
+![社区-未登录.png](https://i.loli.net/2020/04/30/eKwhQmu64AckdIS.png)
+
+#### 实现
+
+**拦截器**
+
+1. 拦截器示例：
+   1. 定义拦截器，实现`HandlerInterceptor`
+   2. 配置拦截器，为期指定拦截、排除路径
+2. 拦截器应用
+   1. 请求开始时，查询登录的用户
+   2. 本次请求中，持有用户数据
+   3. 模板视图中显示用户数据
+   4. 请求结束时，清理用户数据
+
+
+
+### 账号设置（文件上传下载）
+
+* 请求： 必须是post
+* 表单： enctype = "multipart/form-data"
+* Spring MVC： 通过MultipartFile处理文件上传
+
+#### 步骤
+
+1. 访问账号设置页面
+2. 上传头像
+3. 获取头像
+
+
+
 
 

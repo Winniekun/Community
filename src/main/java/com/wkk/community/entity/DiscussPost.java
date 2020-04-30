@@ -1,4 +1,4 @@
-package com.wkk.community.pojo;
+package com.wkk.community.entity;
 
 import java.util.Date;
 

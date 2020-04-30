@@ -1,7 +1,7 @@
 package com.wkk.community.service;
 
 import com.wkk.community.CommunityApplication;
-import com.wkk.community.pojo.DiscussPost;
+import com.wkk.community.entity.DiscussPost;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,8 +10,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @Time: 2020/4/29上午10:53
