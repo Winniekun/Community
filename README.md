@@ -4,9 +4,60 @@
   - 1次请求的执行过程
 *  分步实现
   * 开发社区首页，显示前10个帖子
-  * 开发分页组件，分页显示所有的帖子
+  * **开发分页组件，分页显示所有的帖子**
 
+#### 细节
 
+```html
+<nav class="mt-5" th:if="${page.rows>0}">
+<!--分页基础视图-->
+<ul class="pagination justify-content-center">
+    <li class="page-item">
+        <a class="page-link" href="#">首页</a>
+    </li>
+    <li class="page-item disabled">
+        <a class="page-link" href="#">上一页</a>
+    </li>
+    <li class="page-item active">
+        <a class="page-link" href="#">1</a>
+    </li>
+    <li class="page-item">
+        <a class="page-link" href="#">下一页</a>
+    </li>
+    <li class="page-item">
+        <a class="page-link" href="#">尾页</a>
+    </li>
+</ul>
+
+<!--thymeleaf实现-->
+<ul class="pagination justify-content-center">
+    <!--首页-->
+    <li class="page-item">
+        <!--链接示例
+        {${page.path}(current=1)}
+        /index?current=1
+        -->
+        <a class="page-link" th:href="@{${page.path}(current=1)}">首页</a>
+    </li>
+    <!--上一页-->
+    <li th:class="|page-item ${page.current==1?'disabled':''}|">
+        <a class="page-link" th:href="@{${page.path}(current=${page.current-1})}">上一页</a>
+    </li>
+    <!--current为中心的五个 -->
+    <li th:class="|page-item ${i==page.current?'active':''}|"
+        th:each="i:${#numbers.sequence(page.from,page.to)}">
+        <a class="page-link" th:text="${i}" th:href="@{${page.path}(current=${i})}"></a>
+    </li>
+    <!--下一页-->
+    <li th:class="|page-item ${page.current==page.total?'disabled':''}|">
+        <a class="page-link" th:href="@{${page.path}(current=${page.current+1})}">下一页</a>
+    </li>
+    <!--尾页-->
+    <li class="page-item">
+        <a class="page-link" th:href="@{${page.path}(current=${page.total})}">末页</a>
+    </li>
+</ul>
+```
 
 ### 调试
 
@@ -61,6 +112,44 @@ public static String generateMD5(String key){
     ...
 </form>
 ```
+
+激活：
+
+1. 成功
+2. 重复
+3. 错误链接
+
+
+
+### 会话管理
+
+#### HTTP的基本性质
+
+- HTTP是简单的
+
+  > 虽然下一代HTTP/2协议将HTTP消息封装到了帧（frames）中，HTTP大体上还是被设计得简单易读。HTTP报文能够被人读懂，还允许简单测试，降低了门槛，对新人很友好。
+
+- HTTP是可拓展的
+
+  > 在 HTTP/1.0 中出现的 [HTTP headers](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers) 让协议扩展变得非常容易。只要服务端和客户端就新 headers 达成语义一致，新功能就可以被轻松加入进来。
+
+- HTTP是无状态的，有会话的
+
+  > HTTP是无状态的：在同一个连接中，两个执行成功的请求之间是没有关系的。这就带来了一个问题，用户没有办法在同一个网站中进行连续的交互，比如在一个电商网站里，用户把某个商品加入到购物车，切换一个页面后再次添加了商品，这两次添加商品的请求之间没有关联，浏览器无法知道用户最终选择了哪些商品。而使用HTTP的头部扩展，HTTP Cookies就可以解决这个问题。把Cookies添加到头部中，创建一个会话让每次请求都能共享相同的上下文信息，达成相同的状态。
+  >
+  > 注意，HTTP本质是无状态的，使用Cookies可以创建有状态的会话。
+
+#### Cookie
+
+* 服务端发送到浏览器，并保存在浏览器的一小块数据
+* 浏览器下次访问该服务器时，会自动携带该块数据，将其发送给服务器
+
+#### Session
+
+* 是JavaEE的标准，用于服务端记录客户信息
+* 数据储存放在服务端更安全，但是也会增加服务器压力
+
+### 验证码
 
 
 

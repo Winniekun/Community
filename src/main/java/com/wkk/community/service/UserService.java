@@ -2,6 +2,7 @@ package com.wkk.community.service;
 
 import com.wkk.community.dao.UserMapper;
 import com.wkk.community.pojo.User;
+import com.wkk.community.util.CommunityConstant;
 import com.wkk.community.util.CommunityUtil;
 import com.wkk.community.util.MailClient;
 import org.apache.commons.lang3.StringUtils;
@@ -22,7 +23,7 @@ import java.util.Random;
  * @Email: kongwiki@163.com
  */
 @Service
-public class UserService {
+public class UserService implements CommunityConstant {
     @Autowired(required = false)
     private UserMapper userMapper;
     @Autowired
@@ -58,7 +59,7 @@ public class UserService {
             return map;
         }
         if(StringUtils.isBlank(user.getEmail())){
-            map.put("mailMSG", "邮箱不能为空");
+            map.put("emailMSG", "邮箱不能为空");
             return map;
         }
 
@@ -70,7 +71,7 @@ public class UserService {
         }
         u = userMapper.selectByEmail(user.getEmail());
         if(u!= null){
-            map.put("mailMSG", "邮箱不能为空");
+            map.put("emailMSG", "邮箱已注册");
             return map;
         }
 
@@ -88,8 +89,10 @@ public class UserService {
         user.setCreateTime(new Date());
         userMapper.insertUser(user);
 
+        user = userMapper.selectByName(user.getUsername());
         // 激活邮件
         Context context = new Context();
+
         context.setVariable("email", user.getEmail());
         // http://localhost:8080/community/activation/{userId}/activeCode
         String url = domain + contextPath + "/activation/" + user.getId() +"/" + user.getActivationCode();
@@ -99,5 +102,19 @@ public class UserService {
         mailClient.sendMail(user.getEmail(), "Wiki社区激活邮件", content);
         return map;
 
+    }
+
+    public int activation(int userId, String activeCode){
+        User user = userMapper.selectById(userId);
+        if(user.getStatus() == 1){
+            return ACTIVATION_REPEAT;
+
+        }
+        else if(user.getActivationCode().equals(activeCode)){
+            userMapper.updateStatus(userId, 1);
+            return ACTIVATION_SUCCESS;
+        }else {
+            return ACTIVATION_FAILURE;
+        }
     }
 }

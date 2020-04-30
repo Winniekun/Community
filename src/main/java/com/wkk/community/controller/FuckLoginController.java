@@ -1,13 +1,26 @@
 package com.wkk.community.controller;
 
+import com.google.code.kaptcha.Producer;
+import com.sun.deploy.net.HttpResponse;
 import com.wkk.community.pojo.User;
 import com.wkk.community.service.UserService;
+import com.wkk.community.util.CommunityConstant;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import javax.imageio.ImageIO;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.Map;
 
 /**
@@ -16,17 +29,55 @@ import java.util.Map;
  * @Email: kongwiki@163.com
  */
 @Controller
-public class FuckLoginController {
+public class FuckLoginController implements CommunityConstant {
+    private static final Logger logger = LoggerFactory.getLogger(FuckLoginController.class);
+
     @Autowired
     private UserService userService;
+    @Autowired
+    private Producer kaptchaProducer;
+
 
     @RequestMapping(value = "/register", method = RequestMethod.GET)
     public String getRegisterPage(){
         return "/site/register";
     }
 
+    @RequestMapping(value = "/login", method = RequestMethod.GET)
+    public String getLoginPage(){
+        return "/site/login";
+    }
+
+    /**
+     * 生产验证码
+     * @param response
+     * @param session
+     */
+    @RequestMapping(value = "/kaptcha", method = RequestMethod.GET)
+    public void getKaptcha(HttpServletResponse response, HttpSession session){
+        // 生成验证码
+        String text = kaptchaProducer.createText();
+        // 生成验证码图片
+        BufferedImage image = kaptchaProducer.createImage(text);
+
+        // 将验证码存入session
+        session.setAttribute("kaptcha", text);
+        // 将图片输出给浏览器
+        response.setContentType("image/png");
+        try {
+            OutputStream outputStream = response.getOutputStream();
+            ImageIO.write(image, "png", outputStream);
+
+        } catch (IOException e) {
+            logger.error("响应验证码失败: " + e.getMessage());
+        }
+
+
+    }
+
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     public String postRegister(Model model, User user){
+        int id = user.getId();
         Map<String, Object> map = userService.register(user);
         // 注册成功
         if(map == null || map.isEmpty()){
@@ -36,11 +87,32 @@ public class FuckLoginController {
         }else {
             model.addAttribute("usernameMSG", map.get("usernameMSG"));
             model.addAttribute("passwordMSG", map.get("passwordMSG"));
-            model.addAttribute("mailMSG", map.get("mailMSG"));
+            model.addAttribute("emailMSG", map.get("emailMSG"));
             return "/site/register";
         }
 
 
     }
+
+
+    // http://localhost:8080/community/activation/{userId}/activeCode
+    @RequestMapping(value = "/activation/{userId}/{activeCode}", method = RequestMethod.GET)
+    public String activation(Model model, @PathVariable("userId") int userId, @PathVariable("activeCode") String activeCode){
+        int activation = userService.activation(userId, activeCode);
+        // 成功跳转登录、失败跳转首页、重复
+        if(activation == ACTIVATION_SUCCESS){
+            model.addAttribute("msg", "激活成功, 您的账号已经可以正常使用了");
+            model.addAttribute("target", "/login");
+        }else if(activation == ACTIVATION_REPEAT){
+            model.addAttribute("msg", "无效操作，该账号已经激活");
+            model.addAttribute("target", "/index");
+        }else {
+            model.addAttribute("msg", "激活失败，您提供的激活码不正确");
+            model.addAttribute("target", "/index");
+        }
+        return "/site/operate-result";
+
+    }
+
 
 }

@@ -53,7 +53,7 @@ class UserMapperTest {
     @Test
     public void testInsertUser(){
         User user = new User();
-        user.setUserName("weikunkun");
+        user.setUsername("weikunkun");
         user.setPassword("123456");
         user.setSalt("abc");
         user.setEmail("kongwiki@163.com");

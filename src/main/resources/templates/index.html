@@ -39,7 +39,7 @@
                             <a class="nav-link" th:href="@{/register}">注册</a>
                         </li>
                         <li class="nav-item ml-3 btn-group-vertical">
-                            <a class="nav-link" href="site/login.html">登录</a>
+                            <a class="nav-link" th:href="@{/login}">登录</a>
                         </li>
                         <li class="nav-item ml-3 btn-group-vertical dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
@@ -161,23 +161,23 @@
             <!-- 分页 -->
             <nav class="mt-5" th:if="${page.rows>0}">
 <!--                分页基础-->
-<!--                <ul class="pagination justify-content-center">-->
-<!--                    <li class="page-item">-->
-<!--                        <a class="page-link" href="#">首页</a>-->
-<!--                    </li>-->
-<!--                    <li class="page-item disabled">-->
-<!--                        <a class="page-link" href="#">上一页</a>-->
-<!--                    </li>-->
-<!--                    <li class="page-item active">-->
-<!--                        <a class="page-link" href="#">1</a>-->
-<!--                    </li>-->
-<!--                    <li class="page-item">-->
-<!--                        <a class="page-link" href="#">下一页</a>-->
-<!--                    </li>-->
-<!--                    <li class="page-item">-->
-<!--                        <a class="page-link" href="#">尾页</a>-->
-<!--                    </li>-->
-<!--                </ul>-->
+                <ul class="pagination justify-content-center">
+                    <li class="page-item">
+                        <a class="page-link" href="#">首页</a>
+                    </li>
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#">上一页</a>
+                    </li>
+                    <li class="page-item active">
+                        <a class="page-link" href="#">1</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="#">下一页</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="#">尾页</a>
+                    </li>
+                </ul>
 
 
                 <ul class="pagination justify-content-center">
