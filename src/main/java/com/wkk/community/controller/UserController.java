@@ -1,6 +1,5 @@
 package com.wkk.community.controller;
 
-import com.sun.deploy.net.HttpResponse;
 import com.wkk.community.annotation.LoginRequired;
 import com.wkk.community.entity.User;
 import com.wkk.community.service.UserService;
@@ -18,8 +17,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.FileInputStream;

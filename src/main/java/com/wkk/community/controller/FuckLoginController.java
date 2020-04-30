@@ -43,7 +43,6 @@ public class FuckLoginController implements CommunityConstant {
     @Value("${server.servlet.context-path}")
     private String contextPath;
 
-
     @RequestMapping(value = "/register", method = RequestMethod.GET)
     public String getRegisterPage(){
         return "/site/register";
