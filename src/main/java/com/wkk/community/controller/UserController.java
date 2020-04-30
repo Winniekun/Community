@@ -1,6 +1,7 @@
 package com.wkk.community.controller;
 
 import com.sun.deploy.net.HttpResponse;
+import com.wkk.community.annotation.LoginRequired;
 import com.wkk.community.entity.User;
 import com.wkk.community.service.UserService;
 import com.wkk.community.util.CommunityUtil;
@@ -49,13 +50,14 @@ public class UserController {
     @Value("${community.path.upload}")
     private String uploadPath;
 
-
+    @LoginRequired
     //返回设置界面
     @RequestMapping(value = "/setting", method = RequestMethod.GET)
     public String getSettingPage(){
         return "site/setting";
     }
 
+    @LoginRequired
     // 上传文件请求处理
     @RequestMapping(value = "/upload", method = RequestMethod.POST)
     public String uploadHeader(MultipartFile headerImage, Model model){
@@ -88,6 +90,7 @@ public class UserController {
     }
 
     // 修改密码
+    @LoginRequired
     @RequestMapping(value = "/password", method = RequestMethod.POST)
     public String updatePassword(String oldPassword, String newPasswordI, String newPasswordII,  Model model){
         if(StringUtils.isBlank(oldPassword) || StringUtils.isBlank(newPasswordI) || StringUtils.isBlank(newPasswordII)){
@@ -110,7 +113,7 @@ public class UserController {
 
     }
 
-    // 获取用户头像
+                // 获取用户头像
     // http://localhost:8080:/community/user/header/xxx.png
     @RequestMapping(value = "/header/{filename}", method = RequestMethod.GET)
     public void getUserHeader(@PathVariable("filename") String filename, HttpServletResponse response){
