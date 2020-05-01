@@ -8,6 +8,7 @@ import com.wkk.community.util.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -34,7 +35,7 @@ public class HomeController {
         page.setRows(discussPostService.findDiscussPostRows(0));
         List<DiscussPost> discussPosts = discussPostService.findDiscussPosts(0, page.getOffset(), page.getLimit());
         List<Map<String, Object>> list = new ArrayList<>();
-        if(list != null){
+        if(discussPosts != null){
             for (DiscussPost discussPost : discussPosts) {
                 Map<String, Object> map = new HashMap<>();
                 map.put("post", discussPost);

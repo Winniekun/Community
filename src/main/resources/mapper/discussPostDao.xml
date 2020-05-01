@@ -23,7 +23,13 @@
         </if>
     </select>
 
-    <insert id="insertDiscussPost" parameterType="com.wkk.community.entity.DiscussPost">
+    <select id="selectDiscussPostById" resultType="com.wkk.community.entity.DiscussPost">
+        SELECT *
+        FROM discuss_post
+        WHERE id = ${id}
+    </select>
+
+    <insert id="insertDiscussPost" parameterType="com.wkk.community.entity.DiscussPost" keyProperty="id">
         INSERT INTO discuss_post (user_id, title, content, type, status, create_time, comment_count, score)
         VALUES (#{userId}, #{title}, #{content}, #{type}, #{status}, #{createTime}, #{commentCount}, #{score})
     </insert>

@@ -46,4 +46,9 @@ public class DiscussPostService {
         return discussPostMapper.insertDiscussPost(discussPost);
 
     }
+
+    // post详情
+    public DiscussPost findDiscussPostById(int id){
+        return discussPostMapper.selectDiscussPostById(id);
+    }
 }

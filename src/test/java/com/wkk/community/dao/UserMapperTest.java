@@ -80,5 +80,13 @@ class UserMapperTest {
 
     }
 
+    @Test
+    public void testSelectById(){
+        int id = 281;
+        DiscussPost discussPost = discussPostService.findDiscussPostById(id);
+        System.out.println(discussPost.getTitle() + " " + discussPost.getContent());
+
+    }
+
 }
 

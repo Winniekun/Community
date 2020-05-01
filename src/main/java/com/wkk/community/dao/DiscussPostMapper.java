@@ -14,7 +14,7 @@ import java.util.List;
 @Mapper
 public interface DiscussPostMapper {
     /**
-     *
+     * 查询帖子
      * @param userId 用户id
      * @param offset 起始位置
      * @param limit 每一页显示多少条数据
@@ -23,13 +23,20 @@ public interface DiscussPostMapper {
     List<DiscussPost> selectDiscussPosts(int userId, int offset, int limit);
 
     /**
-     *
+     * 查询帖子
      * @param userId
      * @return
      */
     // param 用于给参数取别名
     // 如果只有一个参数，并且在<if>里使用，则必须使用param
     int selectDiscussPostrows(@Param("userId") int userId);
+
+    /**
+     *
+     * @param id discuss的主键id
+     * @return
+     */
+    DiscussPost selectDiscussPostById(int id);
 
 
     /**

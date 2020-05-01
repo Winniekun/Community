@@ -11,6 +11,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
@@ -49,6 +52,8 @@ public class UserService implements CommunityConstant {
     }
 
     // 注册业务逻辑处理
+    // 添加事物管理
+    @Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRED)
     public Map<String, Object> register(User user){
         Map<String, Object> map = new HashMap<>();
         // 输入逻辑问题
@@ -95,7 +100,7 @@ public class UserService implements CommunityConstant {
         user.setCreateTime(new Date());
         userMapper.insertUser(user);
 
-        user = userMapper.selectByName(user.getUsername());
+//        user = userMapper.selectByName(user.getUsername());
         // 激活邮件
         Context context = new Context();
 

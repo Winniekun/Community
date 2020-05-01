@@ -21,7 +21,7 @@
         WHERE email = #{email}
     </select>
 
-    <insert id="insertUser">
+    <insert id="insertUser" parameterType="com.wkk.community.entity.User" keyProperty="id">
         INSERT INTO user (username, password, salt, email, type, status, activation_code, header_url, create_time)
         VALUES (#{username}, #{password}, #{salt}, #{email}, #{type}, #{status}, #{activationCode}, #{headerUrl},
                 #{createTime})
