@@ -206,10 +206,13 @@
 			</div>
 			<!-- 回帖输入 -->
 			<div class="container mt-3">
-				<form class="replyform">
+				<form class="replyform" th:action="@{|/comment/add/${post.id}|}" method="post">
 					<p class="mt-3">
 						<a name="replyform"></a>
-						<textarea placeholder="在这里畅所欲言你的看法吧!"></textarea>
+						<textarea placeholder="在这里畅所欲言你的看法吧!" name="content"></textarea>
+						<input type="hidden" name="entityType" th:value="1">
+						<input type="hidden" name="entityId" th:value="${post.id}">
+
 					</p>
 					<p class="text-right">
 						<button type="submit" class="btn btn-primary btn-sm">&nbsp;&nbsp;回&nbsp;&nbsp;帖&nbsp;&nbsp;</button>

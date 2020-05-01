@@ -44,4 +44,10 @@ public interface DiscussPostMapper {
      */
 
     int insertDiscussPost(DiscussPost discussPost);
+
+    /**
+     * 更新帖子的评论量
+     */
+    int updateCommentCount(int id, int commentCount);
+
 }

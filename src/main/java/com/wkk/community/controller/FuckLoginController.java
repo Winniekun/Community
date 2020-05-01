@@ -4,6 +4,7 @@ import com.google.code.kaptcha.Producer;
 import com.wkk.community.entity.User;
 import com.wkk.community.service.UserService;
 import com.wkk.community.util.CommunityConstant;
+import com.wkk.community.util.CommunityUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,6 +53,11 @@ public class FuckLoginController implements CommunityConstant {
     public String getLoginPage(){
         return "/site/login";
     }
+    @RequestMapping(value = "/forget", method = RequestMethod.GET)
+    public String forgetPassword(){
+        return "/site/forget";
+    }
+
 
     @RequestMapping(value = "/logout", method = RequestMethod.GET)
     public String logout(@CookieValue("ticket") String ticket){
@@ -153,6 +159,26 @@ public class FuckLoginController implements CommunityConstant {
             model.addAttribute("target", "/index");
         }
         return "/site/operate-result";
+
+    }
+
+    // 忘记密码处理
+    @RequestMapping(value = "/forget", method = RequestMethod.POST)
+    public String updatePassword(Model model, String email, String password){
+        // 空值处理
+        if(StringUtils.isBlank(email) || StringUtils.isBlank(password)){
+            model.addAttribute("errorMSG", "请填写相关信息");
+            return "/site/forget";
+        }
+        // 合法性检测
+        User user = userService.findUserByEmail(email);
+        if(user == null){
+            model.addAttribute("emailMSG", "请输入正确的邮箱");
+            return "/site/forget";
+        }
+        user.setPassword( CommunityUtil.md5(user.getSalt() + password));
+        userService.updatePassword(user.getId(), user.getPassword());
+        return "redirect:/login";
 
     }
 

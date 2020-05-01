@@ -51,6 +51,9 @@ public class UserService implements CommunityConstant {
         return userMapper.selectById(id);
     }
 
+    public User findUserByEmail(String email){
+        return userMapper.selectByEmail(email);
+    }
     // 注册业务逻辑处理
     // 添加事物管理
     @Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRED)
@@ -192,4 +195,6 @@ public class UserService implements CommunityConstant {
     public int updatePassword(int userId, String password){
         return userMapper.updatePassword(userId, password);
     }
+
+
 }

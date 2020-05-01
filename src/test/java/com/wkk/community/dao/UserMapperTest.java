@@ -88,5 +88,12 @@ class UserMapperTest {
 
     }
 
+    @Test
+    public void testUpdatePost(){
+        int id = 281;
+        int count = 0;
+        int i = discussPostMapper.updateCommentCount(id, count);
+        System.out.println(i);
+    }
 }
 
