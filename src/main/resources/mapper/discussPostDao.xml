@@ -11,7 +11,7 @@
             AND user_id = #{userId}
         </if>
         ORDER BY type DESC, create_time DESC
-        LIMIT #{offset},  #{limit};
+        LIMIT #{offset}, #{limit};
     </select>
 
     <select id="selectDiscussPostrows" resultType="int">
@@ -22,4 +22,9 @@
             AND user_id = #{userId}
         </if>
     </select>
+
+    <insert id="insertDiscussPost" parameterType="com.wkk.community.entity.DiscussPost">
+        INSERT INTO discuss_post (user_id, title, content, type, status, create_time, comment_count, score)
+        VALUES (#{userId}, #{title}, #{content}, #{type}, #{status}, #{createTime}, #{commentCount}, #{score})
+    </insert>
 </mapper>

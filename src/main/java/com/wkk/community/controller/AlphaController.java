@@ -61,5 +61,15 @@ public class AlphaController {
 
     }
 
+    // ajax示例
+    @RequestMapping(value = "/ajax", method = RequestMethod.POST)
+    @ResponseBody
+    public String testAjax(String name, int age){
+        System.out.println(name);
+        System.out.println(age);
+        return CommunityUtil.getJsonString(0, "操作成功");
+
+    }
+
 
 }

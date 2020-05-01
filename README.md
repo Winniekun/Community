@@ -276,5 +276,18 @@ public static String generateMD5(String key){
 
 
 
+### 发布帖子
+
+#### Ajax
+
+* Asynchronous JavaScript and XML 
+* 异步的JavaScript和XML
+* 使用Ajax，网页能够将增量更新呈现在页面上，而不需要刷新整个页面
+* 虽然X代表XML， 但是目前JSON的使用更加普遍
+
+#### 实现：
+
+* 采用ajax请求，实现发布帖子
+
 
 
