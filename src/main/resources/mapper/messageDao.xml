@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wkk.community.dao.MessageMapper">
+    <!--所有的和登录用户进行会话的用户-->
+    <select id="selectConversations" resultType="com.wkk.community.entity.Message">
+        SELECT *
+        FROM message
+        WHERE id in
+              (SELECT MAX(id)
+               FROM message
+               WHERE status != 2
+                 AND from_id != 1
+                 AND to_id = #{userId}
+                 AND (from_id = ${userId} or to_id = ${userId})
+               GROUP BY conversation_id)
+        ORDER BY id DESC
+        LIMIT ${offset}, ${limit}
+    </select>
+
+    <!--单个用户和登录用户进行会话的次数-->
+    <select id="selectConversationCount" resultType="int">
+        SELECT COUNT(m.maxid)
+        FROM (SELECT MAX(id) AS maxid
+              FROM message
+              WHERE status != 2
+                AND from_id != 1
+                AND to_id = #{userId}
+                AND (from_id = ${userId} or to_id = ${userId})
+              GROUP BY conversation_id) as m
+    </select>
+
+    <!--查询登录用户每个会话-->
+    <select id="selectLetters" resultType="com.wkk.community.entity.Message">
+        SELECT *
+        FROM message
+        WHERE status != 2
+          AND from_id != 1
+          AND conversation_id = #{conversationId}
+        ORDER BY id DESC
+        LIMIT ${offset}, ${limit}
+    </select>
+
+    <!--查询登录用户会话的次数-->
+    <select id="selectLetterCount" resultType="int">
+        SELECT COUNT(id)
+        FROM message
+        WHERE status != 2
+          AND from_id != 1
+          AND conversation_id = #{conversationId}
+    </select>
+
+    <!--查询用户未读信息列表-->
+    <select id="selectLetterUnReadCount" resultType="int">
+        SELECT COUNT(id) from message
+        WHERE status = 0 AND from_id != 1 AND to_id = #{userId}
+        <if test="conversationId != null">
+            AND conversation_id = #{conversationId}
+        </if>
+    </select>
+</mapper>
