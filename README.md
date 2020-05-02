@@ -490,7 +490,18 @@ public static String generateMD5(String key){
 
 ### 统一异常处理
 
-
+1. @ControllerAdvcie
+   * 用于修饰类，所以是controller的全局配置
+   * 配置类型：
+     * 异常处理方法
+     * 数据绑定方案
+     * 绑定参数方案
+2. @ExceptionHandler
+   * 用于修饰方法，controller出现异常后被调用
+3. @ModelAttribute
+   * 修饰方法，controller方法执行前被调用，用于为model对象绑定参数
+4. @DataBinder
+   * 用于修饰方法，该方法会在Controller方法执行前被调用，用于绑定参数的转换器
 
 ### 统一日志处理
 

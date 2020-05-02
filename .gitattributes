@@ -1,0 +1,4 @@
+# 设置项目语言
+*.js linguist-language=Java
+*.css linguist-language=Java
+*.html linguist-language=Java
