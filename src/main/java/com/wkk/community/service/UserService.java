@@ -54,6 +54,10 @@ public class UserService implements CommunityConstant {
     public User findUserByEmail(String email){
         return userMapper.selectByEmail(email);
     }
+
+    public User findUserByName(String name){
+        return userMapper.selectByName(name);
+    }
     // 注册业务逻辑处理
     // 添加事物管理
     @Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRED)

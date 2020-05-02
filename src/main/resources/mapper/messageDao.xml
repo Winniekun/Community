@@ -59,4 +59,20 @@
             AND conversation_id = #{conversationId}
         </if>
     </select>
+
+    <!--增加-->
+    <insert id="insertMessage" parameterType="com.wkk.community.entity.Message" keyProperty="id">
+        INSERT INTO message (from_id, to_id, conversation_id, content, status, create_time)
+        VALUES (#{fromId}, #{toId}, #{conversationId}, #{content}, #{status}, #{createTime});
+    </insert>
+
+    <!--更新状态-->
+    <update id="updateStatus">
+        UPDATE message
+        set status = ${status}
+        WHERE id IN
+              <foreach collection="ids" item="id" open="(" separator="," close=")">
+                  ${id}
+              </foreach>
+    </update>
 </mapper>
