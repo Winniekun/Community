@@ -25,12 +25,13 @@ public class LikeController {
     @Autowired
     private HostHolder hostHolder;
 
+    // ajax异步调用
     @RequestMapping(value = "/like", method = RequestMethod.POST)
     @ResponseBody
-    public String like(int entityType, int entityId){
+    public String like(int entityType, int entityId, int entityUserId){
         User user = hostHolder.getUser();
         // 点赞
-        likeService.like(user.getId(), entityType, entityId);
+        likeService.like(user.getId(), entityType, entityId, entityUserId);
         // 统计该帖子的点赞数量
         long likeCount = likeService.findEntityCount(entityId, entityType);
         // 状态

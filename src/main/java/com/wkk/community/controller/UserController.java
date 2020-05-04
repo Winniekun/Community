@@ -2,6 +2,7 @@ package com.wkk.community.controller;
 
 import com.wkk.community.annotation.LoginRequired;
 import com.wkk.community.entity.User;
+import com.wkk.community.service.LikeService;
 import com.wkk.community.service.UserService;
 import com.wkk.community.util.CommunityUtil;
 import com.wkk.community.util.HostHolder;
@@ -36,6 +37,8 @@ public class UserController {
     @Autowired
     private UserService userService;
     @Autowired
+    private LikeService likeService;
+    @Autowired
     private HostHolder hostHolder;
 
     //域名
@@ -47,24 +50,41 @@ public class UserController {
     @Value("${community.path.upload}")
     private String uploadPath;
 
+    // 个人主页
+    @RequestMapping(value = "/profile/{userId}", method = RequestMethod.GET)
+    public String getProfilePage(@PathVariable("userId") int userId, Model model) {
+        User user = userService.findUserById(userId);
+        if(user == null){
+            throw new RuntimeException("该用户不存在");
+        }
+        // 用户
+        model.addAttribute("user", user);
+        // 点赞数量
+        int likeCount = likeService.findUserLikeCount(userId);
+        model.addAttribute("likeCount", likeCount);
+
+        return "site/profile";
+    }
+
+
     @LoginRequired
     //返回设置界面
     @RequestMapping(value = "/setting", method = RequestMethod.GET)
-    public String getSettingPage(){
+    public String getSettingPage() {
         return "site/setting";
     }
 
     @LoginRequired
     // 上传文件请求处理
     @RequestMapping(value = "/upload", method = RequestMethod.POST)
-    public String uploadHeader(MultipartFile headerImage, Model model){
-        if(headerImage == null){
+    public String uploadHeader(MultipartFile headerImage, Model model) {
+        if (headerImage == null) {
             model.addAttribute("error", "您还没有选择图片");
             return "/site/setting";
         }
         String filename = headerImage.getOriginalFilename();
         String suffix = filename.substring(filename.lastIndexOf("."));
-        if(StringUtils.isBlank(suffix)){
+        if (StringUtils.isBlank(suffix)) {
             model.addAttribute("error", "文件格式不正确");
             return "site/setting";
         }
@@ -86,21 +106,21 @@ public class UserController {
         return "redirect:/index";
     }
 
-    // 修改密码
+    // 登录后修改密码
     @LoginRequired
     @RequestMapping(value = "/password", method = RequestMethod.POST)
-    public String updatePassword(String oldPassword, String newPasswordI, String newPasswordII,  Model model){
-        if(StringUtils.isBlank(oldPassword) || StringUtils.isBlank(newPasswordI) || StringUtils.isBlank(newPasswordII)){
+    public String updatePassword(String oldPassword, String newPasswordI, String newPasswordII, Model model) {
+        if (StringUtils.isBlank(oldPassword) || StringUtils.isBlank(newPasswordI) || StringUtils.isBlank(newPasswordII)) {
             model.addAttribute("passwordMSG", "您还没有填写密码");
             return "/site/setting";
         }
         User user = hostHolder.getUser();
         oldPassword = CommunityUtil.md5(user.getSalt() + oldPassword);
-        if(!oldPassword.equals(user.getPassword())){
+        if (!oldPassword.equals(user.getPassword())) {
             model.addAttribute("oldPasswordMSG", "旧密码输入错误");
             return "/site/setting";
         }
-        if(!newPasswordI.equals(newPasswordII)){
+        if (!newPasswordI.equals(newPasswordII)) {
             model.addAttribute("newPasswordMSG", "两次密码不一样");
             return "/site/setting";
         }
@@ -110,23 +130,23 @@ public class UserController {
 
     }
 
-                // 获取用户头像
+    // 获取用户头像
     // http://localhost:8080:/community/user/header/xxx.png
     @RequestMapping(value = "/header/{filename}", method = RequestMethod.GET)
-    public void getUserHeader(@PathVariable("filename") String filename, HttpServletResponse response){
+    public void getUserHeader(@PathVariable("filename") String filename, HttpServletResponse response) {
         // 服务器存放的路径
         filename = uploadPath + "/" + filename;
         // 图片后缀
         String suffix = filename.substring(filename.lastIndexOf("."));
         // 响应图片
         response.setContentType("image/" + suffix);
-        try(
+        try (
                 FileInputStream fis = new FileInputStream(filename);
                 OutputStream outputStream = response.getOutputStream();
         ) {
             byte[] buffer = new byte[1024];
             int b = 0;
-            while ((b= fis.read(buffer)) != -1){
+            while ((b = fis.read(buffer)) != -1) {
                 outputStream.write(buffer, 0, b);
             }
         } catch (IOException e) {
