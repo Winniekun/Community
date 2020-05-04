@@ -143,7 +143,7 @@
                             <span>发布于 <b th:text="${#dates.format(cvo.comment.createTime,'yyyy-MM-dd HH:mm:ss')}">2019-04-15 15:32:18</b></span>
                             <ul class="d-inline float-right">
                                 <li class="d-inline ml-2">
-                                    <a href="javascript:;" th:onclick="|like(this, 2, ${cvo.comment.id}, ${cvo.commnet.userId});|" class="text-primary">
+                                    <a href="javascript:;" th:onclick="|like(this, 2, ${cvo.comment.id}, ${cvo.comment.userId});|" class="text-primary">
                                         <b>赞</b> (<i th:text="${cvo.commentLikeCount}">1</i>)
                                     </a>
                                 </li>
