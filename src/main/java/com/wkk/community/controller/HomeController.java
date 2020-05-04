@@ -3,7 +3,9 @@ package com.wkk.community.controller;
 import com.wkk.community.entity.DiscussPost;
 import com.wkk.community.entity.User;
 import com.wkk.community.service.DiscussPostService;
+import com.wkk.community.service.LikeService;
 import com.wkk.community.service.UserService;
+import com.wkk.community.util.CommunityConstant;
 import com.wkk.community.util.CommunityUtil;
 import com.wkk.community.util.Page;
 import org.apache.commons.lang3.StringUtils;
@@ -26,11 +28,13 @@ import java.util.Map;
  * @Email: kongwiki@163.com
  */
 @Controller
-public class HomeController {
+public class HomeController implements CommunityConstant {
     @Autowired
     private DiscussPostService discussPostService;
     @Autowired
     private UserService userService;
+    @Autowired
+    private LikeService likeService;
 
     @RequestMapping(value = "/index", method = RequestMethod.GET)
     public String getIndexPage(Model model, Page page){
@@ -44,6 +48,8 @@ public class HomeController {
                 map.put("post", discussPost);
                 User user = userService.findUserById(discussPost.getUserId());
                 map.put("user", user);
+                long likeCount = likeService.findEntityCount(discussPost.getId(), ENTITY_TYPE_POST);
+                map.put("likeCount", likeCount);
                 list.add(map);
             }
         }
@@ -52,5 +58,9 @@ public class HomeController {
         return "/index";
     }
 
+    @RequestMapping(value = "/error", method = RequestMethod.GET)
+    public String getErrorPage(){
+        return "error/500";
+    }
 
 }

@@ -6,13 +6,12 @@ import com.wkk.community.entity.DiscussPost;
 import com.wkk.community.entity.User;
 import com.wkk.community.service.CommentService;
 import com.wkk.community.service.DiscussPostService;
+import com.wkk.community.service.LikeService;
 import com.wkk.community.service.UserService;
 import com.wkk.community.util.CommunityConstant;
 import com.wkk.community.util.CommunityUtil;
 import com.wkk.community.util.HostHolder;
 import com.wkk.community.util.Page;
-import org.apache.ibatis.annotations.Mapper;
-import org.aspectj.weaver.ast.HasAnnotation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -37,6 +36,8 @@ public class DiscussPostController implements CommunityConstant {
     private UserService userService;
     @Autowired
     private CommentService commentService;
+    @Autowired
+    private LikeService likeService;
 
     @Autowired
     private HostHolder hostHolder;
@@ -69,6 +70,9 @@ public class DiscussPostController implements CommunityConstant {
         // 帖子内容
         DiscussPost discussPost = discussPostService.findDiscussPostById(discussId);
         model.addAttribute("post", discussPost);
+        // 帖子获赞数量
+        long postLikeCount = likeService.findEntityCount(discussPost.getId(), ENTITY_TYPE_POST);
+        model.addAttribute("postLikeCount", postLikeCount);
         // 作者
         // 细节处理，通过userId 获取用户的头像或者名称
         // 后期使用redis进行优化(毕竟查询了两次表)
@@ -92,6 +96,10 @@ public class DiscussPostController implements CommunityConstant {
                 commentVo.put("comment", comment);
                 // 作者
                 commentVo.put("user",  userService.findUserById(comment.getUserId()));
+                // 评论获赞次数
+                long commentLikeCount = likeService.findEntityCount(comment.getEntityId(), comment.getEntityType());
+                commentVo.put("commentLikeCount", commentLikeCount);
+
 
                 // 回复列表
                 List<Comment> replyList = commentService.findCommentByEntity(ENTITY_TYPE_COMMENT, comment.getId(),
@@ -109,7 +117,9 @@ public class DiscussPostController implements CommunityConstant {
                         // target
                         User target =  reply.getTargetId() == 0 ? null: userService.findUserById(reply.getTargetId());
                         replyVo.put("target", target);
-
+                        // 回复获赞次数
+                        long replyLikeCount = likeService.findEntityCount(reply.getEntityId(), reply.getEntityType());
+                        replyVo.put("replyLikeCount", replyLikeCount);
                         replyVoList.add(replyVo);
                     }
                 }

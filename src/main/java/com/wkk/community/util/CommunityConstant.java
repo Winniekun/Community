@@ -7,7 +7,7 @@ import org.springframework.validation.beanvalidation.SpringValidatorAdapter;
  * @Author: kongwiki
  * @Email: kongwiki@163.com
  */
-public interface CommunityConstant {
+public interface  CommunityConstant {
     /**
      * 激活成功
      */

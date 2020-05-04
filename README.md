@@ -505,5 +505,53 @@ public static String generateMD5(String key){
 
 ### 统一日志处理
 
+帖子、评论、消息等模块需要，涉及`AOP`
+
+
+
+## 社区点赞关注
+
+### redis基础数据类型:
+
+key是字符串类型，但是value可以有多种数据类型，常用数据结构如下：
+
+1. 哈希
+2. 字符串
+3. 集合
+4. 有序集合
+5. 列表
+
+### Spring整合Redis
+
+#### 步骤：
+
+* 引入依赖
+  * spring-boot-starter-data-redis
+* 配置Redis
+  * 配置数据库参数
+  * 编写配置类，构造RedisTemplate
+* 访问Redis
+  * redisTemplate.opsForValue()
+  * redisTemplate.opsForHash()
+  * redisTemplate.opsForList()
+  * redisTemplate.opsForSet()
+  * redisTemplate.opsForZset()
+
+
+
+
+
+### 点赞
+
+支持对帖子、评论点赞。第一次点赞，第二次取消
+
+* 首页
+  * 统计帖子的点赞数量
+* 详情页
+  * 统计点赞数量
+  * 显示点赞状态
+
+
+
 
 
