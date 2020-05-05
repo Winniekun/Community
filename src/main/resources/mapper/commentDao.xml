@@ -9,7 +9,7 @@
         WHERE status = 0
           AND entity_type = #{entityType}
           AND entity_id = #{entityId}
-        ORDER BY create_time ASC
+        ORDER BY create_time DESC
         LIMIT ${offset}, ${limit}
     </select>
 
