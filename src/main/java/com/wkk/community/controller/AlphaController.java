@@ -30,7 +30,7 @@ public class AlphaController {
         // 设置生效范围
         cookie.setPath("/community/alpha");
         // 设置cookie的生效时间（默认存在内存中， 设置时间之后会存在硬盘中）
-        cookie.setMaxAge(60*10);
+        cookie.setMaxAge(60);
         // 发送给客户端
         response.addCookie(cookie);
         return "set cookie";

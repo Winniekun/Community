@@ -5,11 +5,14 @@ import com.wkk.community.entity.User;
 import com.wkk.community.service.UserService;
 import com.wkk.community.util.CommunityConstant;
 import com.wkk.community.util.CommunityUtil;
+import com.wkk.community.util.CookieUtil;
+import com.wkk.community.util.RedisKeyUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CookieValue;
@@ -26,6 +29,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @Time: 2020/4/29下午9:09
@@ -40,6 +44,8 @@ public class FuckLoginController implements CommunityConstant {
     private UserService userService;
     @Autowired
     private Producer kaptchaProducer;
+    @Autowired
+    private RedisTemplate redisTemplate;
 
     @Value("${server.servlet.context-path}")
     private String contextPath;
@@ -69,17 +75,28 @@ public class FuckLoginController implements CommunityConstant {
     /**
      * 生产验证码
      * @param response
-     * @param session
      */
     @RequestMapping(value = "/kaptcha", method = RequestMethod.GET)
-    public void getKaptcha(HttpServletResponse response, HttpSession session){
+    public void getKaptcha(HttpServletResponse response  /**HttpSession session*/){
         // 生成验证码
         String text = kaptchaProducer.createText();
         // 生成验证码图片
         BufferedImage image = kaptchaProducer.createImage(text);
 
-        // 将验证码存入session
-        session.setAttribute("kaptcha", text);
+        // 验证码的归属
+        String kaptchaOwner = CommunityUtil.generateUUID();
+        Cookie cookie = new Cookie("kaptchaOwner", kaptchaOwner);
+        cookie.setPath(contextPath);
+        // 设置cookie的生效时间（默认存在内存中， 设置时间之后会存在硬盘中）
+        cookie.setMaxAge(60);
+        response.addCookie(cookie);
+
+        // 将验证码存入redis
+        String kapthca = RedisKeyUtil.getKaptcha(kaptchaOwner);
+        redisTemplate.opsForValue().set(kapthca, text, 60, TimeUnit.SECONDS);
+
+//        // 将验证码存入session
+//        session.setAttribute("kaptcha", text);
         // 将图片输出给浏览器
         response.setContentType("image/png");
         try {
@@ -115,9 +132,15 @@ public class FuckLoginController implements CommunityConstant {
     // 登录处理
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public String postLogin(String username, String password, String code, boolean rememberMe,
-                            Model model, HttpSession session, HttpServletResponse response){
+                            Model model /**HttpSession session*/,
+                            @CookieValue("kaptchaOwner") String kaptchaOwner, HttpServletResponse response){
         // 验证码 判断
-        String kaptcha = (String) session.getAttribute("kaptcha");
+        // String kaptcha = (String) session.getAttribute("kaptcha");
+        String kaptcha = null;
+        if(!StringUtils.isBlank(kaptchaOwner)) {
+            String kaptchaKey = RedisKeyUtil.getKaptcha(kaptchaOwner);
+            kaptcha = (String) redisTemplate.opsForValue().get(kaptchaKey);
+        }
         if(StringUtils.isBlank(kaptcha) || StringUtils.isBlank(code) || !kaptcha.equalsIgnoreCase(code)){
             model.addAttribute("codeMSG", "验证码不正确");
             return "site/login";
