@@ -9,6 +9,7 @@ import org.apache.ibatis.annotations.*;
  * @Email: kongwiki@163.com
  */
 @Mapper
+@Deprecated
 public interface LoginTicketMapper {
     //使用注解
     @Insert({

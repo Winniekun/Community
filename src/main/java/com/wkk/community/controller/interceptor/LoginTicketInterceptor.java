@@ -5,7 +5,9 @@ import com.wkk.community.entity.User;
 import com.wkk.community.service.UserService;
 import com.wkk.community.util.CookieUtil;
 import com.wkk.community.util.HostHolder;
+import com.wkk.community.util.RedisKeyUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
@@ -25,6 +27,9 @@ public class LoginTicketInterceptor implements HandlerInterceptor {
     private UserService userService;
     @Autowired
     private HostHolder hostHolder;
+    @Autowired
+    private RedisTemplate redisTemplate;
+
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
