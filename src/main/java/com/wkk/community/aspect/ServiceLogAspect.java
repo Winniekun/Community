@@ -34,7 +34,12 @@ public class ServiceLogAspect {
     public void before(JoinPoint joinPoint){
         // 用户[1,2,3] 在 [time] 访问了 [com.wkk.community.service.xxx()]
         ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        //加入kakfa之后需判空
+        if(requestAttributes == null){
+            return;
+        }
         HttpServletRequest request = requestAttributes.getRequest();
+
         // 获取ip
         String ip = request.getRemoteHost();
         // 时间

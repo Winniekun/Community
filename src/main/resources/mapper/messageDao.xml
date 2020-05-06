@@ -71,8 +71,56 @@
         UPDATE message
         set status = ${status}
         WHERE id IN
-              <foreach collection="ids" item="id" open="(" separator="," close=")">
-                  ${id}
-              </foreach>
+        <foreach collection="ids" item="id" open="(" separator="," close=")">
+            ${id}
+        </foreach>
     </update>
+
+    <!--系统通知-->
+    <!--查询某个主题下最新的通知-->
+    <select id="selectLatestNotice" resultType="com.wkk.community.entity.Message">
+        SELECT *
+        FROM message
+        WHERE id IN
+              (SELECT MAX(id)
+               FROM message
+               WHERE status != 2
+                 AND from_id = 1
+                 AND to_id = #{userId}
+                 AND conversation_id = #{topic}
+              )
+        ORDER BY id DESC
+
+    </select>
+
+    <select id="selectNoticeCount" resultType="int">
+        SELECT COUNT(id)
+        FROM message
+        WHERE to_id = #{userId}
+          AND from_id = 1
+          AND conversation_id = #{topic}
+          AND status != 2
+    </select>
+
+    <select id="selectNoticeUnReadCount" resultType="int">
+        SELECT COUNT(id)
+        FROM message
+        WHERE to_id = #{userId} AND from_id = 1 AND status = 0
+        <if test="topic != null">
+            AND conversation_id = #{topic}
+        </if>
+    </select>
+
+    <select id="selectNotices" resultType="com.wkk.community.entity.Message">
+        SELECT *
+        FROM message
+        where status != 2
+          AND from_id = 1
+          AND to_id = #{userId}
+          AND conversation_id = #{topic}
+        ORDER BY create_time DESC
+        LIMIT #{offset}, #{limit}
+    </select>
+
+
 </mapper>

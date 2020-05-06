@@ -4,9 +4,11 @@ import com.wkk.community.entity.DiscussPost;
 import com.wkk.community.entity.User;
 import com.wkk.community.service.DiscussPostService;
 import com.wkk.community.service.LikeService;
+import com.wkk.community.service.MessageService;
 import com.wkk.community.service.UserService;
 import com.wkk.community.util.CommunityConstant;
 import com.wkk.community.util.CommunityUtil;
+import com.wkk.community.util.HostHolder;
 import com.wkk.community.util.Page;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,7 +55,6 @@ public class HomeController implements CommunityConstant {
                 list.add(map);
             }
         }
-
         model.addAttribute("discussPosts", list);
         return "/index";
     }

@@ -25,4 +25,10 @@
         INSERT INTO comment (user_id, entity_type, entity_id, target_id, content, status, create_time)
         VALUES (#{userId}, #{entityType}, #{entityId}, #{targetId}, #{content}, #{status}, #{createTime})
     </insert>
+
+    <select id="selectCommentById" resultType="com.wkk.community.entity.Comment">
+        SELECT *
+        FROM comment
+        WHERE id = #{id}
+    </select>
 </mapper>

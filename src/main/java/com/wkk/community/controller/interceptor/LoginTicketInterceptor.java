@@ -27,8 +27,6 @@ public class LoginTicketInterceptor implements HandlerInterceptor {
     private UserService userService;
     @Autowired
     private HostHolder hostHolder;
-    @Autowired
-    private RedisTemplate redisTemplate;
 
 
     @Override

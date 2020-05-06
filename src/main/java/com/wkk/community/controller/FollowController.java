@@ -1,6 +1,8 @@
 package com.wkk.community.controller;
 
+import com.wkk.community.entity.Event;
 import com.wkk.community.entity.User;
+import com.wkk.community.event.EventProducer;
 import com.wkk.community.service.FollowService;
 import com.wkk.community.service.UserService;
 import com.wkk.community.util.*;
@@ -26,12 +28,26 @@ public class FollowController implements CommunityConstant {
     @Autowired
     private UserService userService;
 
+
+    // 添加系统通知
+    @Autowired
+    private EventProducer eventProducer;
+
     @RequestMapping(value = "/follow", method = RequestMethod.POST)
     @ResponseBody
     public String getFollow(int entityType, int entityId){
         User user = hostHolder.getUser();
         followService.follow(user.getId(), entityType, entityId);
 
+        // 触发关注
+        Event event = new Event()
+                .setTopic(TOPIC_FOLLOW)
+                .setUserId(hostHolder.getUser().getId())
+                .setEntityId(entityId)
+                .setEntityType(entityType)
+                .setEntityUserId(entityId);
+
+        eventProducer.fireEvent(event);
         return CommunityUtil.getJsonString(0, "已关注");
 
     }

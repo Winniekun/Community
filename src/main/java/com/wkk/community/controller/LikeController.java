@@ -1,7 +1,12 @@
 package com.wkk.community.controller;
 
+import com.wkk.community.entity.Comment;
+import com.wkk.community.entity.DiscussPost;
+import com.wkk.community.entity.Event;
 import com.wkk.community.entity.User;
+import com.wkk.community.event.EventProducer;
 import com.wkk.community.service.LikeService;
+import com.wkk.community.util.CommunityConstant;
 import com.wkk.community.util.CommunityUtil;
 import com.wkk.community.util.HostHolder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,16 +24,20 @@ import java.util.Map;
  * @Email: kongwiki@163.com
  */
 @Controller
-public class LikeController {
+public class LikeController implements CommunityConstant {
     @Autowired
     private LikeService likeService;
     @Autowired
     private HostHolder hostHolder;
 
+    // 添加系统通知
+    @Autowired
+    private EventProducer eventProducer;
+
     // ajax异步调用
     @RequestMapping(value = "/like", method = RequestMethod.POST)
     @ResponseBody
-    public String like(int entityType, int entityId, int entityUserId){
+    public String like(int entityType, int entityId, int entityUserId, int postId){
         User user = hostHolder.getUser();
         // 点赞
         likeService.like(user.getId(), entityType, entityId, entityUserId);
@@ -39,6 +48,19 @@ public class LikeController {
         Map<String, Object> map = new HashMap<>();
         map.put("likeCount", likeCount);
         map.put("likeStatus", likeStatus);
+
+        // 触发点赞事件（单击: 赞， 双击: 取消赞）
+        if(likeStatus == 1) {
+            Event event = new Event()
+                    .setTopic(TOPIC_LIKE)
+                    .setUserId(hostHolder.getUser().getId())
+                    .setEntityId(entityId)
+                    .setEntityType(entityType)
+                    .setEntityUserId(entityUserId)
+                    .setData("postId", postId);
+            eventProducer.fireEvent(event);
+
+        }
         return CommunityUtil.getJsonString(0, null, map);
     }
 }

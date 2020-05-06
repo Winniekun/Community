@@ -611,6 +611,113 @@ key是字符串类型，但是value可以有多种数据类型，常用数据结
 
 
 
+## 社区系统通知
+
+相关技术：kafaka
+
+
+
+### 阻塞队列
+
+#### BlockQueue
+
+* 解决线程通信问题
+* 阻塞方法：put, take
+
+#### 实现类：
+
+* ArrayBlockingQueue
+* LinkedBlockingQueue
+* PriorityBlockingQueue、SynchronousQueue、DelayQueue
+
+#### 应用：
+
+手写`生产者-消费者` 模型
+
+
+
+### Kafka入门
+
+####  简介
+
+1. 分布式流媒体平台
+2. 应用：消息系统、日志收集、用户行为追踪、流式处理
+
+![kafka](https://i.loli.net/2020/05/05/YszGTX9Whc21JM6.png)
+
+#### 特点
+
+1. 高吞吐量、消息持久化、高可靠性、高拓展性
+
+#### 术语
+
+1. Broker、Zookeeper
+2. Topic、Partition、Offset
+3. Leader Replica、Follower Replica
+
+#### 快速入门
+
+[quick start](http://kafka.apache.org/documentation/#quickstart)
+
+
+
+### Spring整合kafka
+
+#### 步骤：
+
+1. 导入依赖
+
+   1. spring-kakfa
+
+2. 配置server、consumer
+
+3. 访问kafka
+
+   1. 生产者
+
+      ```java
+      1. kafkaTempalte.send(topic, data)
+      ```
+
+      消费者
+
+      ```java
+      @KafkaListener(topics = {"test"})
+      public void handleMessage(ConsumerRecord record){
+          
+      }
+      ```
+
+      
+
+### 发送系统通知
+
+* 触发事件
+  * 评论后，发布通知
+  * 点赞后，发布通知
+  * 关注后，发布通知
+* 处理事件
+  * 封装事件对象
+  * 开发事件的生产者
+  * 开发事件的消费者
+
+![kafka](https://i.loli.net/2020/05/05/5oKHyBb4vh3Yw8c.png)
+
+
+
+### 显示系统通知
+
+* 通知列表
+  * 显示评论、点赞、关注三种类型通知
+* 通知详情
+  * 分页显示
+* 未读消息
+  * 页头显示所有未读消息
+
+
+
+
+
 
 
 

@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
  * @Author: kongwiki
  * @Email: kongwiki@163.com
  */
-@Component
+//@Component
 @Aspect
 public class AlphaAspect {
     // 切点
