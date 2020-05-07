@@ -4,12 +4,14 @@ $(function(){
 
 function publish() {
 	$("#publishModal").modal("hide");
-	// 发送ajax请求之前，将CSRF令牌设置到请求头中
-	var token = $("meta[name= '_csrf']").attr("content");
-	var header = $("meta[name= '_csrf_header']").attr("content");
-	$(document).ajaxSend(function (e, xhr, options) {
-		xhr.setRequestHeader(header, token);
-	});
+	var title = $("#recipient-name").val();
+	var content = $("#message-text").val();
+	// // 发送ajax请求之前，将CSRF令牌设置到请求头中
+	// var token = $("meta[name= '_csrf']").attr("content");
+	// var header = $("meta[name= '_csrf_header']").attr("content");
+	// $(document).ajaxSend(function (e, xhr, options) {
+	// 	xhr.setRequestHeader(header, token);
+	// });
 	// 发送异步post
 	$.post(
 		// url
@@ -27,7 +29,7 @@ function publish() {
 				$("#hintModal").modal("hide");
 				// 刷新页面
 				if(data.code === 0){
-					window.location.reload();
+					// window.location.reload();
 				}
 			}, 2000);
 		}
