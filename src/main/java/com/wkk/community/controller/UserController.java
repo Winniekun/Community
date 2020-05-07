@@ -84,15 +84,15 @@ public class UserController implements CommunityConstant {
         return "site/profile";
     }
 
-
-    @LoginRequired
+    // 改用spring security做处理
+//    @LoginRequired
     //返回设置界面
     @RequestMapping(value = "/setting", method = RequestMethod.GET)
     public String getSettingPage() {
         return "site/setting";
     }
 
-    @LoginRequired
+//    @LoginRequired
     // 上传文件请求处理
     @RequestMapping(value = "/upload", method = RequestMethod.POST)
     public String uploadHeader(MultipartFile headerImage, Model model) {

@@ -19,10 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -244,4 +241,26 @@ public class UserService implements CommunityConstant {
         String userKey = RedisKeyUtil.getUserKey(userId);
         redisTemplate.delete(userKey);
     }
+
+//    // 根据用户获取用户权限
+//    public Collection<? extends GrantedAuthority> getAuthority(int userId){
+//        User user = this.findUserById(userId);
+//
+//        List<GrantedAuthority> list = new ArrayList<>();
+//
+//        list.add(new GrantedAuthority() {
+//            @Override
+//            public String getAuthority() {
+//                switch (user.getType()){
+//                    case 1:
+//                        return AUTHORITY_ADMIN;
+//                    case 2:
+//                        return AUTHORITY_MODERATOR;
+//                    default:
+//                        return AUTHORITY_USER;
+//                }
+//            }
+//        });
+//        return list;
+//    }
 }

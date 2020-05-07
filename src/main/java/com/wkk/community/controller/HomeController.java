@@ -39,12 +39,12 @@ public class HomeController implements CommunityConstant {
     private LikeService likeService;
 
     @RequestMapping(value = "/index", method = RequestMethod.GET)
-    public String getIndexPage(Model model, Page page){
+    public String getIndexPage(Model model, Page page) {
         page.setPath("/index");
         page.setRows(discussPostService.findDiscussPostRows(0));
         List<DiscussPost> discussPosts = discussPostService.findDiscussPosts(0, page.getOffset(), page.getLimit());
         List<Map<String, Object>> list = new ArrayList<>();
-        if(discussPosts != null){
+        if (discussPosts != null) {
             for (DiscussPost discussPost : discussPosts) {
                 Map<String, Object> map = new HashMap<>();
                 map.put("post", discussPost);
@@ -60,8 +60,13 @@ public class HomeController implements CommunityConstant {
     }
 
     @RequestMapping(value = "/error", method = RequestMethod.GET)
-    public String getErrorPage(){
+    public String getErrorPage() {
         return "error/500";
     }
 
+    // 没有权限
+    @RequestMapping(value = "/denied", method = RequestMethod.GET)
+    public String getDenied() {
+        return "/error/404";
+    }
 }
