@@ -51,4 +51,12 @@ public class DiscussPostService {
     public DiscussPost findDiscussPostById(int id){
         return discussPostMapper.selectDiscussPostById(id);
     }
+    // 置顶
+    public int updateType(int id, int type){
+        return discussPostMapper.updateType(id, type);
+    }
+    // 加精
+    public int updateStatus(int id, int status){
+        return discussPostMapper.updateStatus(id, status);
+    }
 }

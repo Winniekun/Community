@@ -138,4 +138,26 @@ public class DiscussPostController implements CommunityConstant {
 
     }
 
+    // 置顶
+    @RequestMapping(value = "/top", method = RequestMethod.POST)
+    @ResponseBody
+    public String setTop(int id){
+        discussPostService.updateType(id, 1);
+        return CommunityUtil.getJsonString(0);
+    }
+
+    // 加精
+    @RequestMapping(value = "/wonderful", method = RequestMethod.POST)
+    @ResponseBody
+    public String setWonderful(int id){
+        discussPostService.updateStatus(id, 1);
+        return CommunityUtil.getJsonString(0);
+    }
+
+    @RequestMapping(value = "/delete", method = RequestMethod.POST)
+    @ResponseBody
+    public String setDelete(int id){
+        discussPostService.updateStatus(id, 2);
+        return CommunityUtil.getJsonString(0);
+    }
 }

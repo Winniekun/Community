@@ -50,4 +50,15 @@ public interface DiscussPostMapper {
      */
     int updateCommentCount(int id, int commentCount);
 
+    /**
+     * 置顶
+     */
+    int updateType(int id, int type);
+
+    /**
+     * 加精
+     */
+    int updateStatus(int id, int status);
+    
+
 }

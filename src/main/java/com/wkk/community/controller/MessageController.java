@@ -203,7 +203,7 @@ public class MessageController implements CommunityConstant {
             model.addAttribute("likeNotice", messageVO);
         }
 
-        // 查询关注类通知 
+        // 查询关注类通知
         message = messageService.findLatestNotice(user.getId(), TOPIC_FOLLOW);
         if (message != null) {
             Map<String, Object> messageVO = new HashMap<>();
