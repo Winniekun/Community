@@ -1,5 +1,6 @@
 package com.wkk.community.controller.interceptor;
 
+import com.wkk.community.entity.User;
 import com.wkk.community.service.MessageService;
 import com.wkk.community.util.HostHolder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,9 +26,12 @@ public class MessageInterceptor implements HandlerInterceptor {
 
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
-        int noticeUnReadCount = messageService.findNoticeUnReadCount(hostHolder.getUser().getId(), null);
-        int letterUnReadCount = messageService.findLetterUnReadCount(hostHolder.getUser().getId(), null);
-        int count = noticeUnReadCount + letterUnReadCount;
-        modelAndView.addObject("count",  count);
+        User user = hostHolder.getUser();
+        if(hostHolder.getUser() != null &&  modelAndView != null) {
+            int noticeUnReadCount = messageService.findNoticeUnReadCount(user.getId(), null);
+            int letterUnReadCount = messageService.findLetterUnReadCount(user.getId(), null);
+            int count = noticeUnReadCount + letterUnReadCount;
+            modelAndView.addObject("count", count);
+        }
     }
 }
