@@ -8,7 +8,9 @@ import com.wkk.community.service.CommentService;
 import com.wkk.community.service.DiscussPostService;
 import com.wkk.community.util.CommunityConstant;
 import com.wkk.community.util.HostHolder;
+import com.wkk.community.util.RedisKeyUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,6 +32,8 @@ public class CommentController implements CommunityConstant {
     private CommentService commentService;
     @Autowired
     private DiscussPostService discussPostService;
+    @Autowired
+    private RedisTemplate redisTemplate;
 
 
     // 添加系统通知
@@ -53,11 +57,17 @@ public class CommentController implements CommunityConstant {
         if(comment.getEntityType() == ENTITY_TYPE_POST){
             DiscussPost target = discussPostService.findDiscussPostById(comment.getEntityId());
             event.setEntityUserId(target.getUserId());
+            // 存入缓存
+            String postScoreKey = RedisKeyUtil.getPostScoreKey();
+            redisTemplate.opsForSet().add(postScoreKey, discussPostId);
+
         }else if(comment.getEntityType() == ENTITY_TYPE_COMMENT){
             Comment target = commentService.findCommentById(comment.getEntityId());
             event.setEntityUserId(target.getUserId());
         }
         eventProducer.fireEvent(event);
+
+
         return "redirect:/discuss/detail/" + discussPostId;
     }
 

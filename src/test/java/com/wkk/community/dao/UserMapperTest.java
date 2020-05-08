@@ -73,7 +73,7 @@ class UserMapperTest {
 //        for (DiscussPost discussPost : discussPosts) {
 //            System.out.println("====>" + discussPost);
 //        }
-        List<DiscussPost> posts = discussPostService.findDiscussPosts(0, 0, 10);
+        List<DiscussPost> posts = discussPostService.findDiscussPosts(0, 0, 10, 0);
         for (DiscussPost post : posts) {
             System.out.println("+++++++++++++" + post);
         }

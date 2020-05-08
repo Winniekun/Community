@@ -27,7 +27,7 @@ class DiscussPostServiceTest {
     public void testFind(){
 //        int discussPostRows = service.findDiscussPostRows(101);
 //        System.out.println(discussPostRows);
-        List<DiscussPost> discussPosts = service.findDiscussPosts(0, 0, 0);
+        List<DiscussPost> discussPosts = service.findDiscussPosts(0, 0, 0, 0);
         for (DiscussPost discussPost : discussPosts) {
             System.out.println("+++++++++++++++++++++++++++++++++++++++++++");
             System.out.println(discussPost);

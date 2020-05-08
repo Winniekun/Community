@@ -4,21 +4,16 @@ import com.wkk.community.entity.DiscussPost;
 import com.wkk.community.entity.User;
 import com.wkk.community.service.DiscussPostService;
 import com.wkk.community.service.LikeService;
-import com.wkk.community.service.MessageService;
 import com.wkk.community.service.UserService;
 import com.wkk.community.util.CommunityConstant;
-import com.wkk.community.util.CommunityUtil;
-import com.wkk.community.util.HostHolder;
 import com.wkk.community.util.Page;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.jws.WebParam;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -39,10 +34,12 @@ public class HomeController implements CommunityConstant {
     private LikeService likeService;
 
     @RequestMapping(value = "/index", method = RequestMethod.GET)
-    public String getIndexPage(Model model, Page page) {
-        page.setPath("/index");
+    public String getIndexPage(Model model, Page page,
+                               @RequestParam(name = "orderMode", defaultValue = "0") int orderMode) {
+        page.setPath("/index?orderMode=" + orderMode);
         page.setRows(discussPostService.findDiscussPostRows(0));
-        List<DiscussPost> discussPosts = discussPostService.findDiscussPosts(0, page.getOffset(), page.getLimit());
+        List<DiscussPost> discussPosts = discussPostService.
+                findDiscussPosts(0, page.getOffset(), page.getLimit(), orderMode);
         List<Map<String, Object>> list = new ArrayList<>();
         if (discussPosts != null) {
             for (DiscussPost discussPost : discussPosts) {
@@ -56,6 +53,7 @@ public class HomeController implements CommunityConstant {
             }
         }
         model.addAttribute("discussPosts", list);
+        model.addAttribute("orderMode", orderMode);
         return "/index";
     }
 

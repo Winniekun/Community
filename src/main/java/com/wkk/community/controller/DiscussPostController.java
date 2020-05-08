@@ -8,11 +8,9 @@ import com.wkk.community.service.CommentService;
 import com.wkk.community.service.DiscussPostService;
 import com.wkk.community.service.LikeService;
 import com.wkk.community.service.UserService;
-import com.wkk.community.util.CommunityConstant;
-import com.wkk.community.util.CommunityUtil;
-import com.wkk.community.util.HostHolder;
-import com.wkk.community.util.Page;
+import com.wkk.community.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -38,7 +36,8 @@ public class DiscussPostController implements CommunityConstant {
     private CommentService commentService;
     @Autowired
     private LikeService likeService;
-
+    @Autowired
+    private RedisTemplate redisTemplate;
     @Autowired
     private HostHolder hostHolder;
 
@@ -57,6 +56,10 @@ public class DiscussPostController implements CommunityConstant {
         discussPost.setContent(content);
         discussPost.setCreateTime(new Date());
         discussPostService.addDiscussPost(discussPost);
+
+        // 计算帖子分数 存入缓存
+        String postScoreKey = RedisKeyUtil.getPostScoreKey();
+        redisTemplate.opsForSet().add(postScoreKey, discussPost.getId());
 
         // 报错的情况， 将来程序统一处理
         return CommunityUtil.getJsonString(0, "发布成功");
@@ -151,6 +154,9 @@ public class DiscussPostController implements CommunityConstant {
     @ResponseBody
     public String setWonderful(int id){
         discussPostService.updateStatus(id, 1);
+
+        String postScoreKey = RedisKeyUtil.getPostScoreKey();
+        redisTemplate.opsForSet().add(postScoreKey, id);
         return CommunityUtil.getJsonString(0);
     }
 
