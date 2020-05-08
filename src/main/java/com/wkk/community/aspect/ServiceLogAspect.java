@@ -20,8 +20,8 @@ import java.util.Date;
  * @Author: kongwiki
  * @Email: kongwiki@163.com
  */
-@Component
-@Aspect
+//@Component
+//@Aspect
 public class ServiceLogAspect {
     private static final Logger loggerr = LoggerFactory.getLogger(ServiceLogAspect.class);
 

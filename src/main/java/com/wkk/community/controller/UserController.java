@@ -1,5 +1,7 @@
 package com.wkk.community.controller;
 
+import com.qiniu.util.Auth;
+import com.qiniu.util.StringMap;
 import com.wkk.community.annotation.LoginRequired;
 import com.wkk.community.entity.User;
 import com.wkk.community.service.FollowService;
@@ -15,9 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
@@ -53,6 +53,16 @@ public class UserController implements CommunityConstant {
     private String contextPath;
     @Value("${community.path.upload}")
     private String uploadPath;
+    @Value("${qiniu.key.access}")
+    private String access;
+    @Value("${qiniu.key.secret}")
+    private String secret;
+    @Value("${qiniu.buket.header.name}")
+    private String headerName;
+    @Value("${qiniu.buket.header.url}")
+    private String headerUrl;
+
+
 
     // 个人主页
     @RequestMapping(value = "/profile/{userId}", method = RequestMethod.GET)
@@ -88,12 +98,36 @@ public class UserController implements CommunityConstant {
 //    @LoginRequired
     //返回设置界面
     @RequestMapping(value = "/setting", method = RequestMethod.GET)
-    public String getSettingPage() {
+    public String getSettingPage(Model model) {
+        // 生成生成文件名称
+        String filename = CommunityUtil.generateUUID();
+        // 设置响应信息
+        StringMap policy = new StringMap();
+        policy.put("returnBody", CommunityUtil.getJsonString(0));
+        // 生成上传凭证
+        Auth auth = Auth.create(access, secret);
+        String uploadToken = auth.uploadToken(headerName, filename, 3600, policy);
+        model.addAttribute("uploadToken", uploadToken);
+        model.addAttribute("filename", filename);
+
         return "site/setting";
+    }
+
+    // 更新头像的路径
+    @RequestMapping(value = "/header/url", method = RequestMethod.POST)
+    @ResponseBody
+    public String updateHeaderUrl(String filename){
+        if(StringUtils.isBlank(filename)){
+            return CommunityUtil.getJsonString(1, "文件名不能为空");
+        }
+        String url = headerUrl + "/" + filename;
+        userService.updateHeader(hostHolder.getUser().getId(), url);
+        return CommunityUtil.getJsonString(0);
     }
 
 //    @LoginRequired
     // 上传文件请求处理
+    // 废弃
     @RequestMapping(value = "/upload", method = RequestMethod.POST)
     public String uploadHeader(MultipartFile headerImage, Model model) {
         if (headerImage == null) {
@@ -148,6 +182,7 @@ public class UserController implements CommunityConstant {
 
     }
 
+    // 废弃
     // 获取用户头像
     // http://localhost:8080:/community/user/header/xxx.png
     @RequestMapping(value = "/header/{filename}", method = RequestMethod.GET)
