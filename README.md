@@ -841,3 +841,25 @@ log(精华分  + 评论\*10 + 点赞\*4 ) + （发布时间 - 创站时间）
 
 ![性能测试-未做一级缓存](https://i.loli.net/2020/05/08/BvUeJgw3nrcMjqz.png)
 
+
+
+## 网站部署
+
+### 环境依赖
+
+* [maven](https://mirror-hk.koddos.net/apache/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz)
+* [kafka](http://apache.communilink.net/kafka/2.5.0/kafka_2.12-2.5.0.tgz)
+* [tomcat](http://apache.communilink.net/tomcat/tomcat-9/v9.0.34/bin/apache-tomcat-9.0.34.tar.gz)
+* mysql
+* redis
+
+
+
+### zookeeper、kafka长期
+
+```bash
+/bin/zookeeper-server-start.sh -daemon config/zookeeper.properties
+
+nohup bin/kafka-server-start.sh config/server.properties  1>/dev/null 2>&1 &
+```
+
