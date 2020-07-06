@@ -65,7 +65,7 @@ public class FuckLoginController implements CommunityConstant {
         return "/site/forget";
     }
 
-
+    // 登出处理
     @RequestMapping(value = "/logout", method = RequestMethod.GET)
     public String logout(@CookieValue("ticket") String ticket){
         userService.logout(ticket);
