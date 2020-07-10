@@ -30,11 +30,11 @@ public class RedisTest {
 
     @Test
     public void testString(){
-        String resdisKey = "test:String";
-        redisTemplate.opsForValue().set(resdisKey, 1);
+        String resdisKey = "like:user:111";
+//        redisTemplate.opsForValue().set(resdisKey, 1);
         System.out.println(redisTemplate.opsForValue().get(resdisKey));
-        System.out.println(redisTemplate.opsForValue().increment(resdisKey));
-        System.out.println(redisTemplate.opsForValue().decrement(resdisKey));
+//        System.out.println(redisTemplate.opsForValue().increment(resdisKey));
+//        System.out.println(redisTemplate.opsForValue().decrement(resdisKey));
 
     }
 
