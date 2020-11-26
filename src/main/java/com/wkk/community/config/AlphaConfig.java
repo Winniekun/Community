@@ -16,6 +16,7 @@ public class AlphaConfig {
     // 第三方bean的装配
     @Bean
     public SimpleDateFormat simpleDateFormat(){
+        String a = "yes";
         return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     }
 }
